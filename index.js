@@ -2,7 +2,6 @@ const core = require('@actions/core');
 
 const {
   getJiraIssues,
-  getIssuesToNotify,
 } = require('./jira');
 const {
   formatSlackMessage,
@@ -24,19 +23,18 @@ async function main() {
     const jiraPassword = core.getInput('jira-password');
     const jiraHost = core.getInput('jira-host');
     const jiraBoardId = core.getInput('jira-board-id');
-    const desiredCategory = core.getInput('jira-desired-category');
+    const jiraCustomFilter = core.getInput('jira-custom-filter');
     const defaultMentionUnassigned = core.getInput('default-mention-unassigned');
 
     // Get jira issues
     core.info('Getting jira issues...');
-    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId);
-    core.info(`There are ${jiraResponse.data.issues.length} issues`);
-    const issuesToNotify = getIssuesToNotify(jiraResponse.data.issues, desiredCategory);
-    core.info(`There are ${issuesToNotify.length} issues for notification`);
+    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId, jiraCustomFilter);
+    const issues = jiraResponse.data.issues;
+    core.info(`There are ${issues.length} issues for notification`);
 
     if (issuesToNotify.length) {
       const message = formatSlackMessage(
-          jiraHost, issuesToNotify, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issues, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);

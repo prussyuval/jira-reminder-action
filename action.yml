@@ -34,8 +34,8 @@ inputs:
   default-mention-unassigned:
     description: 'Default tag for unassigned issues (e.g. here)'
     required: false
-  jira-desired-category:
-    description: 'Desired category for issues to be notified, eg: "In Progress"'
+  jira-custom-filter:
+    description: 'Custom JQL filter to filter issues to be notified, eg: "project = TEST"'
     required: false
 runs:
   using: 'node16'
