@@ -1,0 +1,52 @@
+const axios = require('axios');
+
+/**
+ * Create a pretty message to print
+ * @param {Array} issues Array of issues
+ * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
+ * @param {String} messageTemplate The message template to use
+ * @param {String} channel Channel to send the message
+ * @return {object} Response object from Jira API
+ */
+function formatSlackMessage(issues, jiraToGithubMapping, messageTemplate, channel) {
+  if (messageTemplate === null || messageTemplate === undefined) {
+    messageTemplate = 'Hey {mention}, issue "{title}" is waiting for your review: {url}';
+  }
+
+  let message = '';
+
+  for (const issue of issues) {
+    const assignee = issue.fields.assignee;
+    const mention = jiraToGithubMapping[assignee.accountId] ?
+        `<@${jiraToGithubMapping[assignee.accountId]}>` :
+        `${assignee.displayName} (${assignee.accountId})`;
+    message += formatMessage(mention, title, url, messageTemplate) + "\n";
+  }
+
+  return {
+    channel: channel,
+    username: 'Pull Request reviews reminder',
+    text: message,
+  };
+}
+
+/**
+ * Send notification to a channel
+ * @param {String} webhookUrl Webhook URL
+ * @param {Object} messageData Message data object to send into the channel
+ * @return {Promise} Axios promise
+ */
+async function sendNotification(webhookUrl, messageData) {
+  return axios({
+    method: 'POST',
+    url: webhookUrl,
+    data: messageData,
+  });
+}
+
+module.exports = {
+  formatSlackMessage,
+  sendNotification,
+};
+
+

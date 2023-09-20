@@ -1,0 +1,33 @@
+name: 'Jira issues reminder action'
+description: 'Automatically send notification for jira issues'
+branding:
+  icon: 'bell'
+  color: 'yellow'
+inputs:
+  webhook-url:
+    description: 'Webhook URL'
+    required: true
+  channel:
+    description: 'Channel name'
+    required: false
+    default: '#general'
+  jira-github-map:
+    description: 'Map jira account ID to Slack user IDs. Eg: "JohnDoe:UABCDEFGH,JohnDoe123:UABCDEFGI"'
+    required: false
+    default: ''
+  message-template:
+    description: 'Message template to render'
+    required: false
+    default: 'Hey {mention}, the Jira issue "{title}" is waiting for your review: {url}'
+  jira-username:
+    description: 'Jira username'
+    required: true
+  jira-password:
+    description: 'Jira API token'
+    required: true
+  desiredCategory:
+    description: 'Desired category for issues to be notified, eg: "In Progress"'
+    required: false
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
