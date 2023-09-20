@@ -6221,13 +6221,14 @@ function formatMessage(mention, title, url, messageTempalte) {
 
 /**
  * Create a pretty message to print
+ * @param {String} jiraHost Jira hostname
  * @param {Array} issues Array of issues
  * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
  * @param {String} messageTemplate The message template to use
  * @param {String} channel Channel to send the message
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(issues, jiraToGithubMapping, messageTemplate, channel) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, issue "{title}" is waiting for your review: {url}';
   }
@@ -6239,7 +6240,7 @@ function formatSlackMessage(issues, jiraToGithubMapping, messageTemplate, channe
     const mention = jiraToGithubMapping[assignee.accountId] ?
         `<@${jiraToGithubMapping[assignee.accountId]}>` :
         `${assignee.displayName} (${assignee.accountId})`;
-    message += formatMessage(mention, title, url, messageTemplate) + "\n";
+    message += formatMessage(mention, issue.fields.summary, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
   return {
