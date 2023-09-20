@@ -6237,6 +6237,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
   let message = '';
 
   for (const issue of issues) {
+    console.log(issue);
     const issueFields = issue.fields;
 
     let mention;
