@@ -38,6 +38,7 @@ async function main() {
           jiraHost, issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
+      core.info(`Request message: ${JSON.stringify(message)}`);
       core.info(`Response status: ${response.status}`);
       core.info(`Response data: ${JSON.stringify(response.data)}`);
       core.info(`Notification was sent successfully!`);
