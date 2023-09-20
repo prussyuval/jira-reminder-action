@@ -38,7 +38,7 @@ function getIssuesToNotify(issues, desiredCategory) {
   }
 
   return issues.filter((issue) => {
-    return issue.fields.status.name.lower() === desiredCategory.lower();
+    return issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase();
   });
 }
 

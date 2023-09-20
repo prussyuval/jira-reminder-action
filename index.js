@@ -27,7 +27,7 @@ async function main() {
     // Get jira issues
     core.info('Getting jira issues...');
     const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost);
-    core.info(`There are ${jiraResponse.data.issues} issues`);
+    core.info(`There are ${jiraResponse.data.issues.length} issues`);
     const issuesToNotify = getIssuesToNotify(jiraResponse.data.issues, desiredCategory);
     core.info(`There are ${issuesToNotify.length} issues for notification`);
 
