@@ -46,7 +46,7 @@ function getIssuesToNotify(issues, desiredCategory) {
 
   let statuses = {};
   issues.forEach((issue) => {
-    if (!issue.fields.status.name.toLowerCase() in statuses) {
+    if (!(issue.fields.status.name.toLowerCase() in statuses)) {
       statuses[issue.fields.status.name.toLowerCase()] = 0;
     }
     statuses[issue.fields.status.name.toLowerCase()]++;
@@ -57,9 +57,7 @@ function getIssuesToNotify(issues, desiredCategory) {
     console.log(`There are ${value} issues for status '${key}'`);
   });
 
-  return issues.filter((issue) => {
-    return issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase();
-  });
+  return issues.filter(issue => issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase());
 }
 
 module.exports = {
