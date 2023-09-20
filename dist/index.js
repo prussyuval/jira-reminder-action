@@ -6266,7 +6266,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
  * @return {Promise} Axios promise
  */
 async function sendNotification(webhookUrl, messageData) {
-  return axios({
+  return await axios({
     method: 'POST',
     url: webhookUrl,
     data: messageData,
@@ -10736,7 +10736,9 @@ async function main() {
       const message = formatSlackMessage(
           jiraHost, issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
       );
-      await sendNotification(webhookUrl, message);
+      const response = await sendNotification(webhookUrl, message);
+      core.info(`Response status: ${response.status}`);
+      core.info(`Response data: ${JSON.stringify(response.data)}`);
       core.info(`Notification was sent successfully!`);
     }
   } catch (error) {

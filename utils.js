@@ -61,7 +61,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
  * @return {Promise} Axios promise
  */
 async function sendNotification(webhookUrl, messageData) {
-  return axios({
+  return await axios({
     method: 'POST',
     url: webhookUrl,
     data: messageData,
