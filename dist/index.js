@@ -54,9 +54,10 @@ function getIssuesToNotify(issues, desiredCategory) {
 
   Object.keys(statuses).forEach(key => {
     const value = statuses[key];
-    console.log(`There are ${value} issues for status '${key}'`);
+    core.info(`There are ${value} issues for status '${key}'`);
   });
 
+  core.info(`There are ${statuses[desiredCategory.toLowerCase()]} issues for status '${desiredCategory}'`);
   return issues.filter(issue => issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase());
 }
 
