@@ -46,7 +46,7 @@ function getIssuesToNotify(issues, desiredCategory) {
 
   let statuses = {};
   issues.forEach((issue) => {
-    if (!statuses.includes(issue.fields.status.name.toLowerCase())) {
+    if (!issue.fields.status.name.toLowerCase() in statuses) {
       statuses.includes[issue.fields.status.name.toLowerCase()] = 0;
     }
       statuses.includes[issue.fields.status.name.toLowerCase()]++;
