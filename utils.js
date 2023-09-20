@@ -49,7 +49,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   return {
     channel: channel,
-    username: 'Pull Request reviews reminder',
+    username: 'Jira issues reminder',
     text: message,
   };
 }
