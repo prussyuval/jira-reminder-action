@@ -28,6 +28,12 @@ inputs:
   jira-host:
     description: 'Jira host'
     required: true
+  jira-board-id:
+    description: 'Jira board ID (e.g. 12)'
+    required: true
+  default-mention-unassigned:
+    description: 'Default tag for unassigned issues (e.g. here)'
+    required: false
   jira-desired-category:
     description: 'Desired category for issues to be notified, eg: "In Progress"'
     required: false

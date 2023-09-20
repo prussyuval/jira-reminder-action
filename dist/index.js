@@ -14,10 +14,10 @@ const core = __nccwpck_require__(2186);
  * @param {String} jiraHost Jira hostname
  * @return {object} Response object from Jira API
  */
-async function getJiraIssues(username, password, jiraHost) {
+async function getJiraIssues(username, password, jiraHost, jiraBoardId) {
   return await axios({
     method: 'GET',
-    url: `https://${jiraHost}/rest/agile/1.0/board/12/issue`,
+    url: `https://${jiraHost}/rest/agile/1.0/board/${jiraBoardId}/issue`,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -57,7 +57,7 @@ function getIssuesToNotify(issues, desiredCategory) {
     core.info(`There are ${value} issues for status '${key}'`);
   });
 
-  core.info(`There are ${statuses[desiredCategory.toLowerCase()]} issues for status '${desiredCategory}'`);
+  core.info(`Filtering with status category: '${desiredCategory}'`);
   return issues.filter(issue => issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase());
 }
 
@@ -6226,9 +6226,10 @@ function formatMessage(mention, title, url, messageTempalte) {
  * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
  * @param {String} messageTemplate The message template to use
  * @param {String} channel Channel to send the message
+ * @param {String} defaultMentionUnassigned Default mention for unassigned issues
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, issue "{title}" is waiting for your review: {url}';
   }
@@ -6237,9 +6238,16 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   for (const issue of issues) {
     const assignee = issue.fields.assignee;
-    const mention = jiraToGithubMapping[assignee.accountId] ?
+
+    let mention;
+    if (assignee === null || assignee === undefined) {
+      mention = `<@${defaultMentionUnassigned}>`;
+    } else {
+      mention = jiraToGithubMapping[assignee.accountId] ?
         `<@${jiraToGithubMapping[assignee.accountId]}>` :
         `${assignee.displayName} (${assignee.accountId})`;
+    }
+
     message += formatMessage(mention, issue.fields.summary, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
@@ -10712,17 +10720,21 @@ async function main() {
     const jiraUsername = core.getInput('jira-username');
     const jiraPassword = core.getInput('jira-password');
     const jiraHost = core.getInput('jira-host');
+    const jiraBoardId = core.getInput('jira-board-id');
     const desiredCategory = core.getInput('jira-desired-category');
+    const defaultMentionUnassigned = core.getInput('default-mention-unassigned');
 
     // Get jira issues
     core.info('Getting jira issues...');
-    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost);
+    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId);
     core.info(`There are ${jiraResponse.data.issues.length} issues`);
     const issuesToNotify = getIssuesToNotify(jiraResponse.data.issues, desiredCategory);
     core.info(`There are ${issuesToNotify.length} issues for notification`);
 
     if (issuesToNotify.length) {
-      const message = formatSlackMessage(issuesToNotify, jiraToGithubMapping, messageTemplate, channel);
+      const message = formatSlackMessage(
+          issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
+      );
       await sendNotification(webhookUrl, message);
       core.info(`Notification was sent successfully!`);
     }

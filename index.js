@@ -22,17 +22,21 @@ async function main() {
     const jiraUsername = core.getInput('jira-username');
     const jiraPassword = core.getInput('jira-password');
     const jiraHost = core.getInput('jira-host');
+    const jiraBoardId = core.getInput('jira-board-id');
     const desiredCategory = core.getInput('jira-desired-category');
+    const defaultMentionUnassigned = core.getInput('default-mention-unassigned');
 
     // Get jira issues
     core.info('Getting jira issues...');
-    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost);
+    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId);
     core.info(`There are ${jiraResponse.data.issues.length} issues`);
     const issuesToNotify = getIssuesToNotify(jiraResponse.data.issues, desiredCategory);
     core.info(`There are ${issuesToNotify.length} issues for notification`);
 
     if (issuesToNotify.length) {
-      const message = formatSlackMessage(issuesToNotify, jiraToGithubMapping, messageTemplate, channel);
+      const message = formatSlackMessage(
+          issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
+      );
       await sendNotification(webhookUrl, message);
       core.info(`Notification was sent successfully!`);
     }

@@ -8,10 +8,10 @@ const core = require('@actions/core');
  * @param {String} jiraHost Jira hostname
  * @return {object} Response object from Jira API
  */
-async function getJiraIssues(username, password, jiraHost) {
+async function getJiraIssues(username, password, jiraHost, jiraBoardId) {
   return await axios({
     method: 'GET',
-    url: `https://${jiraHost}/rest/agile/1.0/board/12/issue`,
+    url: `https://${jiraHost}/rest/agile/1.0/board/${jiraBoardId}/issue`,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -51,7 +51,7 @@ function getIssuesToNotify(issues, desiredCategory) {
     core.info(`There are ${value} issues for status '${key}'`);
   });
 
-  core.info(`There are ${statuses[desiredCategory.toLowerCase()]} issues for status '${desiredCategory}'`);
+  core.info(`Filtering with status category: '${desiredCategory}'`);
   return issues.filter(issue => issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase());
 }
 
