@@ -6249,7 +6249,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
         `${assignee.displayName} (${assignee.accountId})`;
     }
 
-    message += formatMessage(mention, issue.fields.summary, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
+    message += formatMessage(mention, issueFields.summary, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
   return {
