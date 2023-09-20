@@ -7,6 +7,7 @@ const {
 const {
   formatSlackMessage,
   sendNotification,
+  stringToObject,
 } = require('./utils');
 
 
@@ -35,7 +36,7 @@ async function main() {
 
     if (issuesToNotify.length) {
       const message = formatSlackMessage(
-          jiraHost, issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issuesToNotify, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);

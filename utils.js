@@ -68,9 +68,28 @@ async function sendNotification(webhookUrl, messageData) {
   });
 }
 
+/**
+ * Convert a string like "name1:ID123,name2:ID456" to an Object { name1: "ID123", name2: "ID456"}
+ * @param {String} str String to convert to Object
+ * @return {Object} Object with Account IDs as properties and IDs as values
+ */
+function stringToObject(str) {
+  const map = {};
+  if (!str) {
+    return map;
+  }
+  const users = str.replace(/[\s\r\n]+/g, '').split(',');
+  users.forEach((user) => {
+    const [github, provider] = user.split(':');
+    map[github] = provider;
+  });
+  return map;
+}
+
 module.exports = {
   formatSlackMessage,
   sendNotification,
+  stringToObject,
 };
 
 
