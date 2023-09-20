@@ -35,7 +35,7 @@ async function main() {
 
     if (issuesToNotify.length) {
       const message = formatSlackMessage(
-          issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
       );
       await sendNotification(webhookUrl, message);
       core.info(`Notification was sent successfully!`);

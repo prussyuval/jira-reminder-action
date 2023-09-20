@@ -6236,9 +6236,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   let message = '';
 
-  console.log(issues);
   for (const issue of issues) {
-    console.log(issue);
     const issueFields = issue.fields;
 
     let mention;
@@ -10736,7 +10734,7 @@ async function main() {
 
     if (issuesToNotify.length) {
       const message = formatSlackMessage(
-          issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issuesToNotify, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned
       );
       await sendNotification(webhookUrl, message);
       core.info(`Notification was sent successfully!`);
