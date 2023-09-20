@@ -1,6 +1,20 @@
 const axios = require('axios');
 
 /**
+ * Format the message to print
+ * @param {String} mention Username to mention as the reviewer
+ * @param {String} title PR title
+ * @param {String} url PR URL
+ * @param {String} messageTempalte Message template to render
+ */
+function formatMessage(mention, title, url, messageTempalte) {
+  let message = messageTempalte.replace('{mention}', mention);
+  message = message.replace('{title}', title);
+  message = message.replace('{url}', url);
+  return message;
+}
+
+/**
  * Create a pretty message to print
  * @param {Array} issues Array of issues
  * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
