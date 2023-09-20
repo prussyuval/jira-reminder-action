@@ -5,7 +5,6 @@
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const axios = __nccwpck_require__(8757);
-const core = __nccwpck_require__(2186);
 
 /**
  * Get Jira issues using Jira API
@@ -19,7 +18,7 @@ const core = __nccwpck_require__(2186);
 async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCustomFilter) {
   let url = `https://${jiraHost}/rest/agile/1.0/board/${jiraBoardId}/issue`;
   if (jiraCustomFilter) {
-    url += `?jql=${jiraCustomFilter}`;
+    url += `?maxResults=1000&jql=${jiraCustomFilter}`;
   }
 
   return await axios({

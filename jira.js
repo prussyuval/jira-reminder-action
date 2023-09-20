@@ -1,5 +1,4 @@
 const axios = require('axios');
-const core = require('@actions/core');
 
 /**
  * Get Jira issues using Jira API
