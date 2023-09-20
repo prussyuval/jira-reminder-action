@@ -1,4 +1,5 @@
 const axios = require('axios');
+const core = require('@actions/core');
 
 /**
  * Get Jira issues using Jira API
@@ -36,6 +37,19 @@ function getIssuesToNotify(issues, desiredCategory) {
   if (desiredCategory === null || desiredCategory === undefined) {
     return issues;
   }
+
+  let statuses = {};
+  issues.forEach((issue) => {
+    if (!statuses.includes(issue.fields.status.name.toLowerCase())) {
+      statuses.includes[issue.fields.status.name.toLowerCase()] = 0;
+    }
+      statuses.includes[issue.fields.status.name.toLowerCase()]++;
+  });
+
+  Object.keys(statuses).forEach(key => {
+    const value = statuses[key];
+    console.log(`There are ${value} issues for status '${key}'`);
+  });
 
   return issues.filter((issue) => {
     return issue.fields.status.name.toLowerCase() === desiredCategory.toLowerCase();
