@@ -25,6 +25,9 @@ inputs:
   jira-password:
     description: 'Jira API token'
     required: true
+  jira-host:
+    description: 'Jira host'
+    required: true
   desiredCategory:
     description: 'Desired category for issues to be notified, eg: "In Progress"'
     required: false

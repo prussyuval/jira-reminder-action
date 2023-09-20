@@ -21,11 +21,12 @@ async function main() {
     const messageTemplate = core.getInput('message-template');
     const jiraUsername = core.getInput('jira-username');
     const jiraPassword = core.getInput('jira-password');
+    const jiraHost = core.getInput('jira-host');
     const desiredCategory = core.getInput('jira-desired-category');
 
     // Get jira issues
     core.info('Getting jira issues...');
-    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword);
+    const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost);
     core.info(`There are ${jiraResponse.data.issues} issues`);
     const issuesToNotify = getIssuesToNotify(jiraResponse.data.issues, desiredCategory);
     core.info(`There are ${issuesToNotify.length} issues for notification`);

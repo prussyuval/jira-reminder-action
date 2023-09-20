@@ -4,12 +4,13 @@ const axios = require('axios');
  * Get Jira issues using Jira API
  * @param {String} username Jira username
  * @param {String} password Jira API Key
+ * @param {String} jiraHost Jira hostname
  * @return {object} Response object from Jira API
  */
-async function getJiraIssues(username, password) {
+async function getJiraIssues(username, password, jiraHost) {
   return await axios({
     method: 'GET',
-    url: 'https://wenrix.atlassian.net/rest/agile/1.0/board/12/issue',
+    url: `https://${jiraHost}/rest/agile/1.0/board/12/issue`,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -37,7 +38,7 @@ function getIssuesToNotify(issues, desiredCategory) {
   }
 
   return issues.filter((issue) => {
-    return issue.fields.status.name === desiredCategory;
+    return issue.fields.status.name.lower() === desiredCategory.lower();
   });
 }
 
