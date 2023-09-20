@@ -13,7 +13,7 @@ const core = require('@actions/core');
 async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCustomFilter) {
   let url = `https://${jiraHost}/rest/agile/1.0/board/${jiraBoardId}/issue`;
   if (jiraCustomFilter) {
-    url += `?jql=${jiraCustomFilter}`;
+    url += `?maxResults=1000&jql=${jiraCustomFilter}`;
   }
 
   return await axios({
