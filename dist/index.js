@@ -6241,7 +6241,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
     let mention;
     if (!('assignee' in issueFields) || issueFields.assignee === null) {
-      mention = `<@${defaultMentionUnassigned}>`;
+      mention = defaultMentionUnassigned;
     } else {
       const assignee = issueFields.assignee;
       mention = jiraToGithubMapping[assignee.accountId] ?
