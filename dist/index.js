@@ -10724,7 +10724,7 @@ async function main() {
     const issues = jiraResponse.data.issues;
     core.info(`There are ${issues.length} issues for notification`);
 
-    if (issuesToNotify.length) {
+    if (issues.length) {
       const message = formatSlackMessage(
           jiraHost, issues, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
       );
