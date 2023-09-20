@@ -28,7 +28,7 @@ inputs:
   jira-host:
     description: 'Jira host'
     required: true
-  desiredCategory:
+  jira-desired-category:
     description: 'Desired category for issues to be notified, eg: "In Progress"'
     required: false
 runs:
