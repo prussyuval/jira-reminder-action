@@ -22,7 +22,7 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
   }
 
   console.log(`Jira API URL: ${url}`);
-  console.log(`Headers: ${headers}`);
+  console.log(`Headers: ${JSON.stringify(headers)}`);
 
   try {
     return await axios({method: 'GET', url: url, headers: headers});
