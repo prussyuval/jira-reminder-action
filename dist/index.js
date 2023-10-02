@@ -27,8 +27,8 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
     'Authorization': `Basic ${authorization}`,
   }
 
-  console.log(`Jira API URL: ${url}`);
-  console.log(`Headers: ${JSON.stringify(headers)}`);
+  // console.log(`Jira API URL: ${url}`);
+  // console.log(`Headers: ${JSON.stringify(headers)}`);
 
   try {
     return await axios({method: 'GET', url: url, headers: headers});
