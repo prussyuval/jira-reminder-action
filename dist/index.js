@@ -37,7 +37,8 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
       },
     });
   } catch (error) {
-    console.error(`Failed to get Jira issues: ${error} (${error.response.data})`);
+    console.error(`Failed to get Jira issues: ${error}`);
+    console.error(error.response.data);
     throw new Error(error);
   }
 }
