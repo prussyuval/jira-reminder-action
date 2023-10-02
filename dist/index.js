@@ -21,6 +21,8 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
     url += `?maxResults=1000&jql=${jiraCustomFilter}`;
   }
 
+  console.log(`Jira API URL: ${url}`);
+
   return await axios({
     method: 'GET',
     url: url,
