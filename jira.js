@@ -15,19 +15,17 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
     url += `?maxResults=1000&jql=${jiraCustomFilter}`;
   }
   const authorization = Buffer.from(`${username}:${password}`).toString('base64');
+  const headers = {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Basic ${authorization}`,
+  }
 
   console.log(`Jira API URL: ${url}`);
+  console.log(`Headers: ${headers}`);
 
   try {
-    return await axios({
-      method: 'GET',
-      url: url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Basic ${authorization}`,
-      },
-    });
+    return await axios({method: 'GET', url: url, headers: headers});
   } catch (error) {
     console.error(`Failed to get Jira issues: ${error}`);
     console.error(error.response.data);
