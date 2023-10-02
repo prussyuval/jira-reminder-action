@@ -14,6 +14,7 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
   if (jiraCustomFilter) {
     url += `?maxResults=1000&jql=${jiraCustomFilter}`;
   }
+  const authorization = Buffer.from(`${username}:${password}`).toString('base64');
 
   console.log(`Jira API URL: ${url}`);
 
@@ -24,10 +25,7 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-      },
-      auth: {
-        username: username,
-        password: password,
+        'Authorization': `Basic ${authorization}`,
       },
     });
   } catch (error) {
