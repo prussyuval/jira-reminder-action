@@ -17,18 +17,23 @@ async function getJiraIssues(username, password, jiraHost, jiraBoardId, jiraCust
 
   console.log(`Jira API URL: ${url}`);
 
-  return await axios({
-    method: 'GET',
-    url: url,
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    auth: {
-      username: username,
-      password: password,
-    },
-  });
+  try {
+    return await axios({
+      method: 'GET',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      auth: {
+        username: username,
+        password: password,
+      },
+    });
+  } catch (error) {
+    console.error(`Failed to get Jira issues: ${error}`);
+    throw new Error(error);
+  }
 }
 
 module.exports = {
