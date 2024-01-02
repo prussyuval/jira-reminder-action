@@ -33,8 +33,11 @@ async function main() {
     core.info(`There are ${issues.length} issues for notification`);
 
     if (issues.length) {
+      const usersMap = stringToObject(jiraToGithubMapping);
+      core.info('Users map:');
+      core.info(usersMap);
       const message = formatSlackMessage(
-          jiraHost, issues, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issues, usersMap, messageTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);
