@@ -78,7 +78,17 @@ function stringToObject(str) {
   if (!str) {
     return map;
   }
-  const users = str.replace(/[\s\r\n]+/g, '').split(',');
+
+  const userPattern = /([\w-:]+->\w+)/g;
+  let users = [];
+  let match = null;
+  do {
+      match = userPattern.exec(users);
+      if(match) {
+          users.push(match[0]);
+      }
+  } while (match);
+
   users.forEach((user) => {
     const [github, provider] = user.split('->');
     map[github] = provider;
