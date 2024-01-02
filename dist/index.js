@@ -6251,7 +6251,7 @@ async function sendNotification(webhookUrl, messageData) {
 }
 
 /**
- * Convert a string like "name1:ID123,name2:ID456" to an Object { name1: "ID123", name2: "ID456"}
+ * Convert a string like "name1->ID123,name2->ID456" to an Object { name1: "ID123", name2: "ID456"}
  * @param {String} str String to convert to Object
  * @return {Object} Object with Account IDs as properties and IDs as values
  */
@@ -6265,7 +6265,7 @@ function stringToObject(str) {
   let users = [];
   let match = null;
   do {
-      match = userPattern.exec(users);
+      match = userPattern.exec(str);
       if(match) {
           users.push(match[0]);
       }
@@ -10739,8 +10739,8 @@ async function main() {
 
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
-      core.info('Users map:');
 
+      core.info('Users map:');
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
       }

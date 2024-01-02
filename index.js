@@ -34,8 +34,8 @@ async function main() {
 
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
-      core.info('Users map:');
 
+      core.info('Users map:');
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
       }
