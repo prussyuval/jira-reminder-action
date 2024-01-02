@@ -10740,7 +10740,11 @@ async function main() {
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
       core.info('Users map:');
-      core.info(usersMap);
+
+      for (const [github, provider] of Object.entries(usersMap)) {
+        core.info(`${github} => ${provider}`);
+      }
+
       const message = formatSlackMessage(
           jiraHost, issues, usersMap, messageTemplate, channel, defaultMentionUnassigned
       );
