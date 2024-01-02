@@ -6260,7 +6260,17 @@ function stringToObject(str) {
   if (!str) {
     return map;
   }
-  const users = str.replace(/[\s\r\n]+/g, '').split(',');
+
+  const userPattern = /([\w-:]+->\w+)/g;
+  let users = [];
+  let match = null;
+  do {
+      match = userPattern.exec(users);
+      if(match) {
+          users.push(match[0]);
+      }
+  } while (match);
+
   users.forEach((user) => {
     const [github, provider] = user.split('->');
     map[github] = provider;
@@ -10728,8 +10738,11 @@ async function main() {
     core.info(`There are ${issues.length} issues for notification`);
 
     if (issues.length) {
+      const usersMap = stringToObject(jiraToGithubMapping);
+      core.info('Users map:');
+      core.info(usersMap);
       const message = formatSlackMessage(
-          jiraHost, issues, stringToObject(jiraToGithubMapping), messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issues, usersMap, messageTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);
