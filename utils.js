@@ -31,6 +31,10 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   let message = '';
 
+  if (issues.length > 0) {
+    message += `*Reminder of ${issues.length} issues:*\n`;
+  }
+
   for (const issue of issues) {
     const issueFields = issue.fields;
 
