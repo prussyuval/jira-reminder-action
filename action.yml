@@ -18,7 +18,7 @@ inputs:
   message-template:
     description: 'Message template to render'
     required: false
-    default: 'Hey {mention}, the Jira issue "{title}" is waiting for your review: {url}'
+    default: 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}'
   jira-username:
     description: 'Jira username'
     required: true

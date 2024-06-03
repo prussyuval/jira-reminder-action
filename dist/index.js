@@ -6186,13 +6186,27 @@ const axios = __nccwpck_require__(8757);
  * Format the message to print
  * @param {String} mention Username to mention as the reviewer
  * @param {String} title PR title
+ * @param {String} priority Priority of the issue
  * @param {String} url PR URL
- * @param {String} messageTempalte Message template to render
+ * @param {String} messageTemplate Message template to render
  */
-function formatMessage(mention, title, url, messageTempalte) {
-  let message = messageTempalte.replace('{mention}', mention);
+function formatMessage(mention, title, priority, url, messageTemplate) {
+  let message = messageTemplate.replace('{mention}', mention);
   message = message.replace('{title}', title);
   message = message.replace('{url}', url);
+
+  let priority_sign = '';
+  if (priority === 'high') {
+    priority_sign = ':arrow_up:';
+  }
+  if (priority === 'medium') {
+    priority_sign = ':left_right_arrow:';
+  }
+  if (priority === 'low') {
+    priority_sign = ':arrow_down:';
+  }
+
+  message = message.replace('{priority_sign}', priority_sign);
   return message;
 }
 
@@ -6208,7 +6222,7 @@ function formatMessage(mention, title, url, messageTempalte) {
  */
 function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned) {
   if (messageTemplate === null || messageTemplate === undefined) {
-    messageTemplate = 'Hey {mention}, issue "{title}" is waiting for your review: {url}';
+    messageTemplate = 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}';
   }
 
   let message = '';
@@ -6218,7 +6232,6 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
   }
 
   for (const issue of issues) {
-    console.log(issue);
     const issueFields = issue.fields;
 
     let mention;
@@ -6231,7 +6244,10 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
         `${assignee.displayName} (${assignee.accountId})`;
     }
 
-    message += formatMessage(mention, issueFields.summary, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
+    let summary = issueFields.summary;
+    let priority = issueFields.priority ? issueFields.priority.name.toLowerCase() : null;
+
+    message += formatMessage(mention, summary, priority, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
   return {
