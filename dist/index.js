@@ -6247,6 +6247,13 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
     let summary = issueFields.summary;
     let priority = issueFields.priority ? issueFields.priority.name.toLowerCase() : null;
 
+    let comments = issue.fields.comment.comments;
+    let lastCommenter = '';
+    if (comments.length > 0) {
+        lastCommenter = comments[comments.length - 1].author[0];
+        console.log(lastCommenter);
+    }
+
     message += formatMessage(mention, summary, priority, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
@@ -10756,8 +10763,6 @@ async function main() {
     core.info('Getting jira issues...');
     const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId, jiraCustomFilter);
     const issues = jiraResponse.data.issues;
-    console.log(issues);
-    console.log(issues[0].fields.comment);
     core.info(`There are ${issues.length} issues for notification`);
 
     if (issues.length) {
