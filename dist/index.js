@@ -10756,6 +10756,7 @@ async function main() {
     core.info('Getting jira issues...');
     const jiraResponse = await getJiraIssues(jiraUsername, jiraPassword, jiraHost, jiraBoardId, jiraCustomFilter);
     const issues = jiraResponse.data.issues;
+    console.log(issues);
     core.info(`There are ${issues.length} issues for notification`);
 
     if (issues.length) {
