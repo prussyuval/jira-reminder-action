@@ -6250,7 +6250,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
     let priority = issueFields.priority ? issueFields.priority.name.toLowerCase() : null;
 
     let comments = issue.fields.comment.comments;
-    let lastCommenter = '';
+    let lastCommenter = '-';
     if (comments.length > 0) {
         lastCommenter = comments[comments.length - 1].author.displayName;
     }
