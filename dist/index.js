@@ -6218,11 +6218,12 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
  * @param {Array} issues Array of issues
  * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
  * @param {String} messageTemplate The message template to use
+ * @param {String} messageTitleTemplate The message title template to use
  * @param {String} channel Channel to send the message
  * @param {String} defaultMentionUnassigned Default mention for unassigned issues
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}';
   }
@@ -6230,7 +6231,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
   let message = '';
 
   if (issues.length > 0) {
-    message += `*Reminder of ${issues.length} issues:*\n`;
+    message += messageTitleTemplate.replace('{issues_length}', `${issues.length}`) + '\n';
   }
 
   for (const issue of issues) {
@@ -10753,6 +10754,7 @@ async function main() {
     const channel = core.getInput('channel');
     const jiraToGithubMapping = core.getInput('jira-github-map');
     const messageTemplate = core.getInput('message-template');
+    const messageTitleTemplate = core.getInput('message-title-template');
     const jiraUsername = core.getInput('jira-username');
     const jiraPassword = core.getInput('jira-password');
     const jiraHost = core.getInput('jira-host');
@@ -10775,7 +10777,7 @@ async function main() {
       }
 
       const message = formatSlackMessage(
-          jiraHost, issues, usersMap, messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issues, usersMap, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);

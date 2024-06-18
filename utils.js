@@ -36,11 +36,12 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
  * @param {Array} issues Array of issues
  * @param {Object} jiraToGithubMapping Object with the mapping between Jira and GitHub users
  * @param {String} messageTemplate The message template to use
+ * @param {String} messageTitleTemplate The message title template to use
  * @param {String} channel Channel to send the message
  * @param {String} defaultMentionUnassigned Default mention for unassigned issues
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, channel, defaultMentionUnassigned) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}';
   }
@@ -48,7 +49,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
   let message = '';
 
   if (issues.length > 0) {
-    message += `*Reminder of ${issues.length} issues:*\n`;
+    message += messageTitleTemplate.replace('{issues_length}', `${issues.length}`) + '\n';
   }
 
   for (const issue of issues) {

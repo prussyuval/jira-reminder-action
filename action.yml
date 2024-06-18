@@ -19,6 +19,10 @@ inputs:
     description: 'Message template to render'
     required: false
     default: 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}'
+  message-title-template:
+    description: 'Message title template to render'
+    required: false
+    default: '*Reminder of {issues_length} issues:*'
   jira-username:
     description: 'Jira username'
     required: true

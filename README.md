@@ -18,6 +18,9 @@ Map Jira account IDs to Slack user IDs. For example, "JohnDoe->UABCDEFGH,JohnDoe
 #### message-template (optional, default: 'Hey {mention}, the Jira issue "{title}" is waiting for your review: {url}')
 Customize the message template used for notifications. You can use placeholders like {mention}, {title}, and {url} to personalize the messages.
 
+### message-title-template (optional, default: '*Reminder of {issues_length} issues:*')
+Customize the message title template used for notifications. You can use placeholders like {issues_length} to personalize the message titles.
+
 #### jira-username (required)
 Your Jira username.
 

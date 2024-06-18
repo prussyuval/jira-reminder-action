@@ -19,6 +19,7 @@ async function main() {
     const channel = core.getInput('channel');
     const jiraToGithubMapping = core.getInput('jira-github-map');
     const messageTemplate = core.getInput('message-template');
+    const messageTitleTemplate = core.getInput('message-title-template');
     const jiraUsername = core.getInput('jira-username');
     const jiraPassword = core.getInput('jira-password');
     const jiraHost = core.getInput('jira-host');
@@ -41,7 +42,7 @@ async function main() {
       }
 
       const message = formatSlackMessage(
-          jiraHost, issues, usersMap, messageTemplate, channel, defaultMentionUnassigned
+          jiraHost, issues, usersMap, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);
