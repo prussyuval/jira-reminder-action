@@ -6187,10 +6187,11 @@ const axios = __nccwpck_require__(8757);
  * @param {String} mention Username to mention as the reviewer
  * @param {String} title PR title
  * @param {String} priority Priority of the issue
+ * @param {String} lastCommenter Last commenter on the issue
  * @param {String} url PR URL
  * @param {String} messageTemplate Message template to render
  */
-function formatMessage(mention, title, priority, url, messageTemplate) {
+function formatMessage(mention, title, priority, lastCommenter, url, messageTemplate) {
   let message = messageTemplate.replace('{mention}', mention);
   message = message.replace('{title}', title);
   message = message.replace('{url}', url);
@@ -6207,6 +6208,7 @@ function formatMessage(mention, title, priority, url, messageTemplate) {
   }
 
   message = message.replace('{priority_sign}', priority_sign);
+  message = message.replace('{last_commenter}', lastCommenter);
   return message;
 }
 
@@ -6250,11 +6252,10 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
     let comments = issue.fields.comment.comments;
     let lastCommenter = '';
     if (comments.length > 0) {
-        lastCommenter = comments[comments.length - 1].author[0];
-        console.log(lastCommenter);
+        lastCommenter = comments[comments.length - 1].author.displayName;
     }
 
-    message += formatMessage(mention, summary, priority, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
+    message += formatMessage(mention, summary, priority, lastCommenter, `https://${jiraHost}/browse/${issue.key}`, messageTemplate) + "\n";
   }
 
   return {
