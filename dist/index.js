@@ -6212,6 +6212,20 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
   return message;
 }
 
+function choseDefaultMention(issueFields, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping, jiraToGithubMapping) {
+  if (!defaultMentionUnassignedByFieldName) {
+    return defaultMentionUnassigned;
+  }
+
+  const fieldValue = issueFields[defaultMentionUnassignedByFieldName];
+  if (defaultMentionUnassignedByFieldMapping[fieldValue]) {
+    const githubAccountId = defaultMentionUnassignedByFieldMapping[fieldValue];
+    return jiraToGithubMapping[githubAccountId] ? `<@${jiraToGithubMapping[githubAccountId]}>` : defaultMentionUnassignedByFieldMapping[fieldValue];
+  }
+  
+  return defaultMentionUnassigned;
+}
+
 /**
  * Create a pretty message to print
  * @param {String} jiraHost Jira hostname
@@ -6221,9 +6235,11 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
  * @param {String} messageTitleTemplate The message title template to use
  * @param {String} channel Channel to send the message
  * @param {String} defaultMentionUnassigned Default mention for unassigned issues
+ * @param {String} defaultMentionUnassignedByFieldName Default mention for unassigned issues by field
+ * @param {Object} defaultMentionUnassignedByFieldMapping Mapping of field values to jira account IDs
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}';
   }
@@ -6239,7 +6255,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
     let mention;
     if (!('assignee' in issueFields) || issueFields.assignee === null) {
-      mention = defaultMentionUnassigned;
+      mention = choseDefaultMention(issueFields, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping, jiraToGithubMapping);
     } else {
       const assignee = issueFields.assignee;
       mention = jiraToGithubMapping[assignee.accountId] ?
@@ -10761,6 +10777,8 @@ async function main() {
     const jiraBoardId = core.getInput('jira-board-id');
     const jiraCustomFilter = core.getInput('jira-custom-filter');
     const defaultMentionUnassigned = core.getInput('default-mention-unassigned');
+    const defaultMentionUnassignedByFieldName = core.getInput('default-mention-unassigned-by-field');
+    const defaultMentionUnassignedByFieldMapping = core.getInput('default-mention-unassigned-by-field-mapping');
 
     // Get jira issues
     core.info('Getting jira issues...');
@@ -10770,14 +10788,22 @@ async function main() {
 
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
-
+      const defaultMentionUnassignedByFieldMapping = stringToObject(defaultMentionUnassignedByFieldMapping);
       core.info('Users map:');
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
       }
 
       const message = formatSlackMessage(
-          jiraHost, issues, usersMap, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned
+          jiraHost, 
+          issues, 
+          usersMap, 
+          messageTemplate, 
+          messageTitleTemplate, 
+          channel, 
+          defaultMentionUnassigned,
+          defaultMentionUnassignedByFieldName,
+          defaultMentionUnassignedByFieldMapping,
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);
