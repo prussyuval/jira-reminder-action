@@ -44,6 +44,12 @@ inputs:
   default-mention-unassigned-by-field-mapping:
     description: 'Mapping of field values to jira account IDs. Eg: "value_1->JohnDoe,value_2->JohnDoe123"'
     required: false
+  default-mention-unassigned-by-field-name:
+    description: 'Name of the field to use for default mention. Eg: "Product"'
+    required: false
+  default-mention-unassigned-by-field-name-mapping:
+    description: 'Mapping of field values to jira account IDs. Eg: "value_1->JohnDoe,value_2->JohnDoe123"'
+    required: false
   jira-custom-filter:
     description: 'Custom JQL filter to filter issues to be notified, eg: "project = TEST"'
     required: false
