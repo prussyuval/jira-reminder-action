@@ -37,7 +37,7 @@ async function main() {
 
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
-      const defaultMentionUnassignedByFieldMapping = stringToObject(defaultMentionUnassignedByFieldMapping);
+      const defaultMentionUnassignedByFieldMappingParsed = stringToObject(defaultMentionUnassignedByFieldMapping);
       core.info('Users map:');
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
@@ -52,7 +52,7 @@ async function main() {
           channel, 
           defaultMentionUnassigned,
           defaultMentionUnassignedByFieldName,
-          defaultMentionUnassignedByFieldMapping,
+          defaultMentionUnassignedByFieldMappingParsed,
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);
