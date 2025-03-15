@@ -26,6 +26,8 @@ async function main() {
     const jiraBoardId = core.getInput('jira-board-id');
     const jiraCustomFilter = core.getInput('jira-custom-filter');
     const defaultMentionUnassigned = core.getInput('default-mention-unassigned');
+    const defaultMentionUnassignedByFieldName = core.getInput('default-mention-unassigned-by-field');
+    const defaultMentionUnassignedByFieldMapping = core.getInput('default-mention-unassigned-by-field-mapping');
 
     // Get jira issues
     core.info('Getting jira issues...');
@@ -35,14 +37,22 @@ async function main() {
 
     if (issues.length) {
       const usersMap = stringToObject(jiraToGithubMapping);
-
+      const defaultMentionUnassignedByFieldMapping = stringToObject(defaultMentionUnassignedByFieldMapping);
       core.info('Users map:');
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
       }
 
       const message = formatSlackMessage(
-          jiraHost, issues, usersMap, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned
+          jiraHost, 
+          issues, 
+          usersMap, 
+          messageTemplate, 
+          messageTitleTemplate, 
+          channel, 
+          defaultMentionUnassigned,
+          defaultMentionUnassignedByFieldName,
+          defaultMentionUnassignedByFieldMapping,
       );
       const response = await sendNotification(webhookUrl, message);
       core.info(`Request message: ${JSON.stringify(message)}`);

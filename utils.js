@@ -30,6 +30,20 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
   return message;
 }
 
+function choseDefaultMention(issueFields, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping, jiraToGithubMapping) {
+  if (!defaultMentionUnassignedByFieldName) {
+    return defaultMentionUnassigned;
+  }
+
+  const fieldValue = issueFields[defaultMentionUnassignedByFieldName];
+  if (defaultMentionUnassignedByFieldMapping[fieldValue]) {
+    const githubAccountId = defaultMentionUnassignedByFieldMapping[fieldValue];
+    return jiraToGithubMapping[githubAccountId] ? `<@${jiraToGithubMapping[githubAccountId]}>` : defaultMentionUnassignedByFieldMapping[fieldValue];
+  }
+  
+  return defaultMentionUnassigned;
+}
+
 /**
  * Create a pretty message to print
  * @param {String} jiraHost Jira hostname
@@ -39,9 +53,11 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
  * @param {String} messageTitleTemplate The message title template to use
  * @param {String} channel Channel to send the message
  * @param {String} defaultMentionUnassigned Default mention for unassigned issues
+ * @param {String} defaultMentionUnassignedByFieldName Default mention for unassigned issues by field
+ * @param {Object} defaultMentionUnassignedByFieldMapping Mapping of field values to jira account IDs
  * @return {object} Response object from Jira API
  */
-function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned) {
+function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTemplate, messageTitleTemplate, channel, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping) {
   if (messageTemplate === null || messageTemplate === undefined) {
     messageTemplate = 'Hey {mention}, {priority_sign} issue "{title}" is waiting for your review: {url}';
   }
@@ -57,7 +73,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
     let mention;
     if (!('assignee' in issueFields) || issueFields.assignee === null) {
-      mention = defaultMentionUnassigned;
+      mention = choseDefaultMention(issueFields, defaultMentionUnassigned, defaultMentionUnassignedByFieldName, defaultMentionUnassignedByFieldMapping, jiraToGithubMapping);
     } else {
       const assignee = issueFields.assignee;
       mention = jiraToGithubMapping[assignee.accountId] ?

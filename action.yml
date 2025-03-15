@@ -38,6 +38,12 @@ inputs:
   default-mention-unassigned:
     description: 'Default tag for unassigned issues (e.g. here)'
     required: false
+  default-mention-unassigned-by-field:
+    description: 'If given, the default mention will be vary based on the value of this field. If field is not matched, the default mention (In default-mention-unassigned) will be used.'
+    required: false
+  default-mention-unassigned-by-field-mapping:
+    description: 'Mapping of field values to jira account IDs. Eg: "value_1->JohnDoe,value_2->JohnDoe123"'
+    required: false
   jira-custom-filter:
     description: 'Custom JQL filter to filter issues to be notified, eg: "project = TEST"'
     required: false
