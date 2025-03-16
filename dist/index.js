@@ -6217,7 +6217,8 @@ function choseDefaultMention(issueFields, defaultMentionUnassigned, defaultMenti
     return defaultMentionUnassigned;
   }
 
-  const fieldValue = issueFields[defaultMentionUnassignedByFieldName];
+  const field = issueFields[defaultMentionUnassignedByFieldName];
+  const fieldValue = field ? field.value : null;
   if (defaultMentionUnassignedByFieldMapping[fieldValue]) {
     const githubAccountId = defaultMentionUnassignedByFieldMapping[fieldValue];
     return jiraToGithubMapping[githubAccountId] ? `<@${jiraToGithubMapping[githubAccountId]}>` : defaultMentionUnassignedByFieldMapping[fieldValue];
