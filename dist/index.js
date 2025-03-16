@@ -6252,6 +6252,8 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   for (const issue of issues) {
     const issueFields = issue.fields;
+    console.log("issueFields");
+    console.log(issueFields);
 
     let mention;
     if (!('assignee' in issueFields) || issueFields.assignee === null) {
@@ -10793,6 +10795,11 @@ async function main() {
       for (const [github, provider] of Object.entries(usersMap)) {
         core.info(`${github} => ${provider}`);
       }
+
+      console.log("defaultMentionUnassignedByFieldName");
+      console.log(defaultMentionUnassignedByFieldName);
+      console.log("defaultMentionUnassignedByFieldMappingParsed");
+      console.log(defaultMentionUnassignedByFieldMappingParsed);
 
       const message = formatSlackMessage(
           jiraHost, 
