@@ -43,6 +43,11 @@ async function main() {
         core.info(`${github} => ${provider}`);
       }
 
+      console.log("defaultMentionUnassignedByFieldName");
+      console.log(defaultMentionUnassignedByFieldName);
+      console.log("defaultMentionUnassignedByFieldMappingParsed");
+      console.log(defaultMentionUnassignedByFieldMappingParsed);
+
       const message = formatSlackMessage(
           jiraHost, 
           issues, 

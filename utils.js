@@ -70,6 +70,8 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
   for (const issue of issues) {
     const issueFields = issue.fields;
+    console.log("issueFields");
+    console.log(issueFields);
 
     let mention;
     if (!('assignee' in issueFields) || issueFields.assignee === null) {
