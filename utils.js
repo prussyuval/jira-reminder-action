@@ -127,7 +127,7 @@ function stringToObject(str) {
     return map;
   }
 
-  const userPattern = /([\w-:]+->\w+)/g;
+  const userPattern = /([ \w-:]+->[\w-:]+)/g;
   let users = [];
   let match = null;
   do {
@@ -139,7 +139,7 @@ function stringToObject(str) {
 
   users.forEach((user) => {
     const [github, provider] = user.split('->');
-    map[github] = provider;
+    map[github.trim()] = provider.trim();
   });
   return map;
 }
