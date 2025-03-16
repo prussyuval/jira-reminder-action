@@ -6309,7 +6309,7 @@ function stringToObject(str) {
     return map;
   }
 
-  const userPattern = /([ \w-:]+->[\w-:]+)/g;
+  const userPattern = /([ \w-:/]+->[\w-:/]+)/g;
   let users = [];
   let match = null;
   do {
