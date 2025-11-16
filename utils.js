@@ -25,10 +25,10 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
     priority_sign = ':large_yellow_circle:';
   }
   if (priority === 'low') {
-    priority_sign = ':large_blue_circle:';
+    priority_sign = ':white_circle:';
   }
   if (priority === 'lowest') {
-    priority_sign = ':large_green_circle:';
+    priority_sign = ':large_blue_circle:';
   }
 
   message = message.replace('{priority_sign}', priority_sign);
