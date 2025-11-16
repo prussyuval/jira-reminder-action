@@ -19,13 +19,13 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
     priority_sign = ':red_circle:';
   }
   if (priority === 'high') {
-    priority_sign = ':orange_circle:';
+    priority_sign = ':large_orange_circle:';
   }
   if (priority === 'low') {
-    priority_sign = ':yellow_circle:';
+    priority_sign = ':large_yellow_circle:';
   }
   if (priority === 'lowest') {
-    priority_sign = ':blue_circle:';
+    priority_sign = ':large_blue_circle:';
   }
 
   message = message.replace('{priority_sign}', priority_sign);
