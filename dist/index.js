@@ -6203,11 +6203,14 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
   if (priority === 'high') {
     priority_sign = ':large_orange_circle:';
   }
-  if (priority === 'low') {
+  if (priority === 'medium') {
     priority_sign = ':large_yellow_circle:';
   }
-  if (priority === 'lowest') {
+  if (priority === 'low') {
     priority_sign = ':large_blue_circle:';
+  }
+  if (priority === 'lowest') {
+    priority_sign = ':large_green_circle:';
   }
 
   message = message.replace('{priority_sign}', priority_sign);
