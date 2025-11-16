@@ -15,14 +15,17 @@ function formatMessage(mention, title, priority, lastCommenter, url, messageTemp
   message = message.replace('{url}', url);
 
   let priority_sign = '';
-  if (priority === 'high') {
-    priority_sign = ':arrow_up:';
+  if (priority === 'highest') {
+    priority_sign = ':red_circle:';
   }
-  if (priority === 'medium') {
-    priority_sign = ':left_right_arrow:';
+  if (priority === 'high') {
+    priority_sign = ':orange_circle:';
   }
   if (priority === 'low') {
-    priority_sign = ':arrow_down:';
+    priority_sign = ':yellow_circle:';
+  }
+  if (priority === 'lowest') {
+    priority_sign = ':blue_circle:';
   }
 
   message = message.replace('{priority_sign}', priority_sign);
@@ -86,6 +89,7 @@ function formatSlackMessage(jiraHost, issues, jiraToGithubMapping, messageTempla
 
     let summary = issueFields.summary;
     let priority = issueFields.priority ? issueFields.priority.name.toLowerCase() : null;
+    let severity = issueFields.severity ? issueFields.severity.name.toLowerCase() : null;
 
     let comments = issue.fields.comment.comments;
     let lastCommenter = '-';
